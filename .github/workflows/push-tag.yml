@@ -8,11 +8,13 @@ jobs:
 
     steps:
       - name: Set up git
-        run: git config --global url."https://x-access-token:${{ secrets.PUSH_TAG_TOKEN }}@github.com/".insteadOf "https://github.com/"
+        run: |
+          echo https://x-access-token:${GITHUB_TOKEN}@github.com > ~/.git-credentials
+          git config credential.helper store
 
       - name: Clone the datahub repo
         run: |
-          git clone --branch staging https://github.com/berkeley-dsep-infra/datahub.git datahub
+          git clone https://github.com/berkeley-dsep-infra/datahub.git
 
       - name: Push tag to datahub repo
         run: |
