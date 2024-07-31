@@ -7,21 +7,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Check out the datahub repo
-      - name: Check out the datahub repo
-        uses: actions/checkout@v4
-        with:
-          repository: berkeley-dsep-infra/datahub
-          ref: staging
-          token: ${{ secrets.PUSH_TAG_TOKEN }}
-          path: datahub
+      - name: Set up git
+        run: git config --global url."https://x-access-token:${{ secrets.PUSH_TAG_TOKEN }}@github.com/".insteadOf "https://github.com/"
+
+      - name: Clone the datahub repo
+        run: |
+          git clone --branch staging https://github.com/berkeley-dsep-infra/datahub.git datahub
 
       - name: Push tag to datahub repo
         run: |
             tag=$(date '+%Y%m%d-%H%M%S')
             cd datahub/
 
-            git config user.name "GitHub Action"
-            git config user.email "action@github.com"
+            git config user.name "GitHub Actions"
+            git config user.email "actions@github.com"
             git tag ${tag}
             git push origin ${tag}
