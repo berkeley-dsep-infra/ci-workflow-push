@@ -10,17 +10,16 @@ jobs:
       - name: Set up git
         run: |
           echo https://x-access-token:${GITHUB_TOKEN}@github.com > ~/.git-credentials
-          git config credential.helper store
 
       - name: Clone the datahub repo
-        run: |
-          git clone https://github.com/berkeley-dsep-infra/datahub.git
+        run: git clone https://github.com/berkeley-dsep-infra/datahub.git
 
       - name: Push tag to datahub repo
         run: |
             tag=$(date '+%Y%m%d-%H%M%S')
             cd datahub/
 
+            git config credential.helper store
             git config user.name "GitHub Actions"
             git config user.email "actions@github.com"
             git tag ${tag}
